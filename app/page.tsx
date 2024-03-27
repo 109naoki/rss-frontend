@@ -10,7 +10,7 @@ const fetchZenn = async () => {
 };
 const fetchQiita = async () => {
   const parser = new Parser();
-  const feed = await parser.parseURL(process.env.NEXT_PUBLIC_QIITA_URL!);
+  const feed = await parser.parseURL(process.env.NEXT_PUBLIC_QIITA_FEED_URL!);
   if (!feed) {
     throw new Error("Failed to fetch Qiita feed");
   }
