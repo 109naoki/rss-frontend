@@ -4,8 +4,7 @@ interface Enclosure {
   type: string;
 }
 
-type Zenn = {
-  creator: string;
+interface ZennItem {
   title: string;
   link: string;
   pubDate: string;
@@ -13,7 +12,11 @@ type Zenn = {
   content: string;
   contentSnippet: string;
   guid: string;
-  isoDate: Date;
+  isoDate: string;
+}
+
+export type Zenn = {
+  items: ZennItem[];
 };
 
 type Qiita = {
