@@ -12,14 +12,14 @@ const fetchZenn = async () => {
 
   const plainFeed = {
     items: feed.items.map((item) => ({
-      title: item.title,
-      link: item.link,
-      pubDate: item.pubDate,
-      creator: item.creator,
-      content: item.content,
-      contentSnippet: item.contentSnippet,
-      guid: item.guid,
-      isoDate: item.isoDate,
+      title: item.title || "",
+      link: item.link || "",
+      pubDate: item.pubDate || "",
+      creator: item.creator || "",
+      content: item.content || "",
+      contentSnippet: item.contentSnippet || "",
+      guid: item.guid || "",
+      isoDate: item.isoDate ? item.isoDate.toString() : "",
       enclosure: {
         url: item.enclosure?.url || "",
         length: item.enclosure?.length?.toString() || "0",
