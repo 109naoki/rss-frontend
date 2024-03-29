@@ -5,7 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
 
 const fetchFeeds = async (category: string) => {
-  const response = await fetch(`/api/feed/${category}`);
+  const response = await fetch(`/api/feed/${category}`, {
+    next: { revalidate: 3600 },
+  });
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
