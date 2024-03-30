@@ -17,17 +17,7 @@ const fetchSeminar = async () => {
       pubDate: item.pubDate || "",
       summary: item.summary || "",
       id: item.guid || "",
-      isoDate: item.isoDate
-        ? new Intl.DateTimeFormat("ja-JP", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            timeZoneName: "short",
-          }).format(new Date(item.isoDate))
-        : "",
+      isoDate: item.isoDate ? item.isoDate.toString() : "",
     })),
   };
 

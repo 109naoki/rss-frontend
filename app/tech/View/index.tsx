@@ -12,7 +12,7 @@ export const View: FC<Props> = ({ tech }) => {
       <div className="container mx-auto px-4">
         <h1 className="text-2xl font-bold mb-4">企業のフィード</h1>
         <div className="flex flex-wrap -mx-2">
-          {tech.items.map((item, index) => (
+          {tech.items.map((item, index: number) => (
             <div key={index} className="w-full sm:w-1/2 md:w-1/3 px-2 mb-4">
               <a
                 href={item.link}
