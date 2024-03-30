@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { FC } from "react";
 
 export const Header: FC = () => {
@@ -16,36 +17,36 @@ export const Header: FC = () => {
       <nav>
         <ul className="flex items-center justify-center  m-0 p-0 overflow-x-auto whitespace-nowrap">
           <li className="px-2.5 py-2.5 whitespace-nowrap md:px-5">
-            <a
-              href="#"
+            <Link
+              href="/"
               className="text-gray-800 no-underline whitespace-nowrap "
             >
               トレンド
-            </a>
+            </Link>
           </li>
           <li className="px-2.5 py-2.5 whitespace-nowrap">
-            <a
-              href="#"
+            <Link
+              href="/tech"
               className="text-gray-800 no-underline whitespace-nowrap md:px-5"
             >
               企業ブログ
-            </a>
+            </Link>
           </li>
           <li className="px-2.5 py-2.5 whitespace-nowrap">
-            <a
+            <Link
+              href="/tech"
+              className="text-gray-800 no-underline whitespace-nowrap md:px-5"
+            >
+              セミナー
+            </Link>
+          </li>
+          <li className="px-2.5 py-2.5 whitespace-nowrap">
+            <Link
               href="#"
               className="text-gray-800 no-underline whitespace-nowrap md:px-5"
             >
-              フォロー中のタグ
-            </a>
-          </li>
-          <li className="px-2.5 py-2.5 whitespace-nowrap md:px-5">
-            <a
-              href="#"
-              className="text-gray-800 no-underline whitespace-nowrap"
-            >
-              検索
-            </a>
+              フォロー
+            </Link>
           </li>
         </ul>
       </nav>
