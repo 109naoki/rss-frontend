@@ -10,7 +10,7 @@ export const View: FC<Props> = ({ zenn }) => {
   return (
     <>
       <div className="container mx-auto px-4">
-        <h1 className="text-2xl font-bold mb-4">zennのフィード</h1>
+        <h1 className="text-2xl font-bold mb-8 text-center">zennのフィード</h1>
         <div className="flex flex-wrap -mx-2">
           {zenn.items.map((item, index) => (
             <div key={index} className="w-full sm:w-1/2 md:w-1/3 px-2 mb-4">
@@ -22,7 +22,11 @@ export const View: FC<Props> = ({ zenn }) => {
               >
                 <div className="p-4">
                   {item.title && (
-                    <p className="text-lg font-semibold mb-2">{item.title}</p>
+                    <p className="text-lg font-semibold mb-2">
+                      {item.title.length > 40
+                        ? item.title.substring(0, 40) + "..."
+                        : item.title}
+                    </p>
                   )}
                   {item.enclosure && item.enclosure.url && (
                     <img
