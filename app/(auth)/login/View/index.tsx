@@ -6,9 +6,10 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import LockIcon from "@mui/icons-material/Lock";
 import toast from "react-hot-toast";
 import CircularProgress from "@mui/material/CircularProgress";
+import Link from "next/link";
 export const View: FC = () => {
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -17,7 +18,7 @@ export const View: FC = () => {
     e.preventDefault();
 
     setLoading(true);
-    toast.error("メールアドレスかパスワードが正しくありません");
+    toast.success("新規登録に成功しました");
     setLoading(false);
   };
   return (
@@ -26,7 +27,7 @@ export const View: FC = () => {
         <div className="mt-8">
           <h1 className="text-center text-lg">ログイン</h1>
           <div className="mt-6">
-            <form onSubmit={handleSubmit} method="POST" className="space-y-6">
+            <form method="POST" className="space-y-6" onSubmit={handleSubmit}>
               <div className="relative mt-1">
                 <input
                   id="email"
@@ -82,15 +83,16 @@ export const View: FC = () => {
 
             <div className="mt-6 space-y-2">
               <div>
-                <a href="#" className="font-medium">
-                  新規登録
-                </a>
+                <Link href="/register" className="font-medium">
+                  新規登録はこちら
+                </Link>
               </div>
               <div>
-                <a href="#" className="font-medium">
-                  パスワードを忘れた場合
-                </a>
+                {/* <a href="#" className="font-medium">
+                  パスワードを忘れば場合
+                </a> */}
               </div>
+              <div></div>
             </div>
           </div>
         </div>

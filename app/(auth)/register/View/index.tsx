@@ -6,6 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import LockIcon from "@mui/icons-material/Lock";
 import toast from "react-hot-toast";
 import CircularProgress from "@mui/material/CircularProgress";
+import Link from "next/link";
 export const View: FC = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -82,9 +83,9 @@ export const View: FC = () => {
 
             <div className="mt-6 space-y-2">
               <div>
-                <a href="#" className="font-medium">
+                <Link href="/login" className="font-medium">
                   すでにアカウントを持っている
-                </a>
+                </Link>
               </div>
               <div></div>
             </div>

@@ -35,11 +35,7 @@ export const Header: FC = () => {
               企業ブログ
             </Link>
           </li>
-          <li className="px-2.5 py-2.5 whitespace-nowrap">
-            <Link href="/seminar" className={getLinkClassName("/seminar")}>
-              セミナー
-            </Link>
-          </li>
+
           <li className="px-2.5 py-2.5 whitespace-nowrap">
             <Link href="/follow" className={getLinkClassName("/follow")}>
               フォロー
