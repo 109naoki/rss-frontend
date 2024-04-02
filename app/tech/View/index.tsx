@@ -32,8 +32,7 @@ export const View: FC<Props> = ({ tech }) => {
       )}
 
       <div className="container mx-auto px-4">
-        <h1 className="text-2xl font-bold mb-8 text-center">企業のフィード</h1>
-        <div className="flex flex-wrap -mx-2">
+        <div className="flex flex-wrap -mx-2 mt-12">
           {tech.items.map((item, index) => (
             <div key={index} className="w-full sm:w-1/2 md:w-1/3 px-2 mb-4">
               <div className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
