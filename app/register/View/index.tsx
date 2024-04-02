@@ -4,35 +4,36 @@ import { FC, useState } from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import LockIcon from "@mui/icons-material/Lock";
-import toast from "react-hot-toast";
+
 import CircularProgress from "@mui/material/CircularProgress";
 import Link from "next/link";
+import { create } from "@/actions/auth/actions";
+import { useFormState } from "react-dom";
+const initialState = {
+  message: null,
+  errors: {},
+};
 export const View: FC = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [state, formAction] = useFormState(create, initialState);
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    setLoading(true);
-    toast.success("新規登録に成功しました");
-    setLoading(false);
-  };
   return (
     <div className="flex min-h-screen items-center justify-center px-5 py-12 lg:px-20">
       <div className="mx-auto my-6 flex w-full max-w-md flex-col rounded-lg border p-10 md:mt-0">
         <div className="mt-8">
           <h1 className="text-center text-lg">新規登録</h1>
           <div className="mt-6">
-            <form method="POST" className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-6" action={formAction}>
               <div className="relative mt-1">
                 <input
                   id="email"
                   name="email"
-                  type="email"
+                  // type="email"
                   placeholder="メールアドレス"
                   className="block w-full rounded-lg border py-3 pl-3 pr-10 text-base transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2"
                 />
@@ -41,6 +42,17 @@ export const View: FC = () => {
                     <EmailIcon />
                   </span>
                 </div>
+                {state?.message && (
+                  <div className="text-red-600 font-bold my-2">
+                    {state?.message}
+                  </div>
+                )}
+                {state?.errors?.email &&
+                  state.errors.email.map((error: string) => (
+                    <div className="text-red-600 font-bold my-2" key={error}>
+                      {error}
+                    </div>
+                  ))}
               </div>
 
               <div className="relative mt-1">
@@ -64,6 +76,12 @@ export const View: FC = () => {
                       <VisibilityIcon />
                     </span>
                   )}
+                  {state?.errors?.password &&
+                    state.errors.password.map((error: string) => (
+                      <div className="text-red-600 font-bold my-2" key={error}>
+                        {error}
+                      </div>
+                    ))}
                 </div>
               </div>
               <div>
