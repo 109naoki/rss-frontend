@@ -7,7 +7,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import toast from "react-hot-toast";
 import CircularProgress from "@mui/material/CircularProgress";
 import Link from "next/link";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { login } from "@/actions/auth/actions";
 const initialState = {
   message: null,
@@ -15,7 +15,7 @@ const initialState = {
 };
 
 export const View: FC = () => {
-  const [loading, setLoading] = useState(false);
+  const { pending } = useFormStatus();
   const [showPassword, setShowPassword] = useState(false);
   const [state, formAction] = useFormState(login, initialState);
   const togglePasswordVisibility = () => {
@@ -28,10 +28,9 @@ export const View: FC = () => {
   }, [state.message]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-5 py-12 lg:px-20">
+    <div className="flex mt-10  items-center justify-center px-5 lg:px-20">
       <div className="mx-auto my-6 flex w-full max-w-md flex-col rounded-lg border p-10 md:mt-0">
         <div className="mt-8">
-          <h1 className="text-center text-lg">ログイン</h1>
           <div className="mt-6">
             <form action={formAction} className="space-y-6">
               <div className="relative mt-1">
@@ -88,10 +87,10 @@ export const View: FC = () => {
               <div>
                 <button
                   type="submit"
-                  className="mx-auto mt-4 block h-10 w-full rounded bg-bgRegister px-5 text-center text-textWhite"
-                  disabled={loading}
+                  className="bg-blueColor mx-auto mt-4 block h-10 w-full rounded bg-bgRegister px-5 text-center text-textWhite"
+                  disabled={pending}
                 >
-                  {loading ? (
+                  {pending ? (
                     <CircularProgress color="inherit" size={25} />
                   ) : (
                     "ログイン"
