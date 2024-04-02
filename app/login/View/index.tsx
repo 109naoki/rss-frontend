@@ -1,33 +1,39 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import LockIcon from "@mui/icons-material/Lock";
 import toast from "react-hot-toast";
 import CircularProgress from "@mui/material/CircularProgress";
 import Link from "next/link";
+import { useFormState } from "react-dom";
+import { login } from "@/actions/auth/actions";
+const initialState = {
+  message: null,
+  errors: {},
+};
+
 export const View: FC = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [state, formAction] = useFormState(login, initialState);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  useEffect(() => {
+    if (state.message) {
+      toast.error(state.message);
+    }
+  }, [state.message]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    setLoading(true);
-    toast.success("新規登録に成功しました");
-    setLoading(false);
-  };
   return (
     <div className="flex min-h-screen items-center justify-center px-5 py-12 lg:px-20">
       <div className="mx-auto my-6 flex w-full max-w-md flex-col rounded-lg border p-10 md:mt-0">
         <div className="mt-8">
           <h1 className="text-center text-lg">ログイン</h1>
           <div className="mt-6">
-            <form method="POST" className="space-y-6" onSubmit={handleSubmit}>
+            <form action={formAction} className="space-y-6">
               <div className="relative mt-1">
                 <input
                   id="email"
@@ -41,6 +47,13 @@ export const View: FC = () => {
                     <EmailIcon />
                   </span>
                 </div>
+
+                {state?.errors?.email &&
+                  state.errors.email.map((error: string) => (
+                    <div className="text-red-600 font-bold my-2" key={error}>
+                      {error}
+                    </div>
+                  ))}
               </div>
 
               <div className="relative mt-1">
@@ -64,6 +77,12 @@ export const View: FC = () => {
                       <VisibilityIcon />
                     </span>
                   )}
+                  {state?.errors?.password &&
+                    state.errors.password.map((error: string) => (
+                      <div className="text-red-600 font-bold my-2" key={error}>
+                        {error}
+                      </div>
+                    ))}
                 </div>
               </div>
               <div>

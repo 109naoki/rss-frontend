@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 const schema = z.object({
   email: z.string().email(),
-  password: z.string().min(6),
+  password: z.string().min(1, { message: "必須項目です" }),
 });
 let apiUrl = "";
 
@@ -31,7 +31,7 @@ export const create = async (
     };
   }
   try {
-    await fetch(`${apiUrl}/auth/signup`, {
+    const res = await fetch(`${apiUrl}/auth/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,8 +41,47 @@ export const create = async (
         password,
       }),
     });
+    console.log(res);
+    if (res.status === 401 || res.status === 500) {
+      return { message: "メールアドレスかパスワードが違います" };
+    }
   } catch (error) {
-    return { message: "Something went wrong" };
+    return { message: "メールアドレスかパスワードが違います" };
+  }
+  redirect("/");
+};
+export const login = async (
+  prevState: { message: string | null },
+  data: FormData
+) => {
+  const email = data.get("email") as string;
+  const password = data.get("password") as string;
+  const validation = schema.safeParse({ email, password });
+  if (!validation.success) {
+    return {
+      message: null,
+      errors: validation.error.flatten().fieldErrors,
+    };
+  }
+  try {
+    const res = await fetch(`${apiUrl}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    if (res.status === 401 || res.status === 500) {
+      return { message: "メールアドレスかパスワードが違います" };
+    }
+    const responseBody = await res.json();
+    console.log(responseBody);
+  } catch (error) {
+    return { message: "メールアドレスかパスワードが違います" };
   }
   redirect("/");
 };
