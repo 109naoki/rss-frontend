@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import LockIcon from "@mui/icons-material/Lock";
@@ -9,6 +9,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Link from "next/link";
 import { create } from "@/actions/auth/actions";
 import { useFormState } from "react-dom";
+import toast from "react-hot-toast";
 const initialState = {
   message: null,
   errors: {},
@@ -21,6 +22,11 @@ export const View: FC = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  useEffect(() => {
+    if (state.message) {
+      toast.error(state.message);
+    }
+  }, [state.message]);
 
   return (
     <div className="flex min-h-screen items-center justify-center px-5 py-12 lg:px-20">
@@ -33,7 +39,7 @@ export const View: FC = () => {
                 <input
                   id="email"
                   name="email"
-                  // type="email"
+                  type="email"
                   placeholder="メールアドレス"
                   className="block w-full rounded-lg border py-3 pl-3 pr-10 text-base transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2"
                 />
@@ -42,11 +48,7 @@ export const View: FC = () => {
                     <EmailIcon />
                   </span>
                 </div>
-                {state?.message && (
-                  <div className="text-red-600 font-bold my-2">
-                    {state?.message}
-                  </div>
-                )}
+
                 {state?.errors?.email &&
                   state.errors.email.map((error: string) => (
                     <div className="text-red-600 font-bold my-2" key={error}>
@@ -76,13 +78,13 @@ export const View: FC = () => {
                       <VisibilityIcon />
                     </span>
                   )}
-                  {state?.errors?.password &&
-                    state.errors.password.map((error: string) => (
-                      <div className="text-red-600 font-bold my-2" key={error}>
-                        {error}
-                      </div>
-                    ))}
                 </div>
+                {state?.errors?.password &&
+                  state.errors.password.map((error: string) => (
+                    <div className="text-red-600 font-bold my-2" key={error}>
+                      {error}
+                    </div>
+                  ))}
               </div>
               <div>
                 <button
