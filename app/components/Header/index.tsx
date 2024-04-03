@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC } from "react";
-
+import { signOut } from "next-auth/react";
 export const Header: FC = () => {
   const pathname = usePathname();
 
@@ -19,24 +19,40 @@ export const Header: FC = () => {
         <Link href="#">
           <Image src="/logo.webp" width={100} height={100} alt="Logo" />
         </Link>
-        <Link href="/login" className="whitespace-nowrap">
+        <Link href="/login" className="font-bold text-lg whitespace-nowrap">
           ログイン
+        </Link>
+        <Link
+          href="/login"
+          onClick={() =>
+            signOut({
+              redirect: false,
+            })
+          }
+          className="font-bold text-base whitespace-nowrap"
+        >
+          ログアウト
         </Link>
       </div>
       <nav className="w-full">
         <ul className="flex items-center justify-center overflow-x-auto whitespace-nowrap">
-          <li className="px-2.5 py-2.5 whitespace-nowrap md:px-5">
-            <Link href="/" className={getLinkClassName("/")}>
+          <li className="font-bold text-lg px-2.5 py-2.5 whitespace-nowrap md:px-5">
+            <Link
+              href="/"
+              font-bold
+              text-base
+              className={getLinkClassName("/")}
+            >
               トレンド
             </Link>
           </li>
-          <li className="px-2.5 py-2.5 whitespace-nowrap">
+          <li className="font-bold text-lg px-2.5 py-2.5 whitespace-nowrap">
             <Link href="/tech" className={getLinkClassName("/tech")}>
               企業ブログ
             </Link>
           </li>
 
-          <li className="px-2.5 py-2.5 whitespace-nowrap">
+          <li className="font-bold text-lg px-2.5 py-2.5 whitespace-nowrap">
             <Link href="/follow" className={getLinkClassName("/follow")}>
               フォロー
             </Link>

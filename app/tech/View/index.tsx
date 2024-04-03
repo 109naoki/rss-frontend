@@ -2,35 +2,16 @@
 
 import { Tech } from "@/type";
 
-import { FC, useState } from "react";
+import { FC } from "react";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import { Modal } from "@/app/components/Base/Modal";
+
 type Props = {
   tech: Tech;
 };
 
 export const View: FC<Props> = ({ tech }) => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [bookmarked, setBookmarked] = useState<boolean[]>(
-    new Array(tech.items.length).fill(false)
-  );
-  const toggleBookmark = (index: number) => {
-    setIsModalOpen(true);
-  };
-
   return (
     <>
-      {isModalOpen && (
-        <Modal
-          open={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          title="ブックマーク"
-          type="modal"
-        >
-          <p>この記事をブックマークしますか？</p>
-        </Modal>
-      )}
-
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap -mx-2 mt-12">
           {tech.items.map((item, index) => (
@@ -56,15 +37,14 @@ export const View: FC<Props> = ({ tech }) => {
                       className="w-full mb-2"
                     />
                   )}
-                  <div className="flex items-center">
-                    <p className="text-sm text-gray-600">{item.isoDate}</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-gray-600">
+                      {new Date(item.isoDate).toLocaleDateString("ja-JP")}
+                    </p>
                     <BookmarkIcon
-                      className={`ml-2 cursor-pointer ${
-                        bookmarked[index] ? "text-red-500" : "text-gray-600"
-                      }`}
                       onClick={(e) => {
                         e.preventDefault();
-                        toggleBookmark(index);
+                        alert("クリックされました");
                       }}
                     />
                   </div>

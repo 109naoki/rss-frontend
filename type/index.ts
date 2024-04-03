@@ -21,7 +21,7 @@ export type SeminarItem = {
   pubDate: string;
   summary: string;
   id: string;
-  isoDate: string;
+  isoDate: Date;
 };
 
 export type Seminar = {

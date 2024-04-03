@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
-import Providers from "@/lib/providers";
+
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { Toaster } from "react-hot-toast";
+import { NextAuthProvider } from "@/lib/providers";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,14 +19,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body>
-        <Providers>
+      <NextAuthProvider>
+        <body className="bg-layoutColor">
           <Toaster />
           <Header />
           {children}
           <Footer />
-        </Providers>
-      </body>
+        </body>
+      </NextAuthProvider>
     </html>
   );
 }

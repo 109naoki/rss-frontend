@@ -1,6 +1,7 @@
 import Parser from "rss-parser";
 import { View } from "./View";
-
+import { authOptions } from "@/lib/authOption";
+import { getServerSession } from "next-auth/next";
 export const revalidate = 43200;
 
 const fetchZenn = async () => {
@@ -42,7 +43,9 @@ const fetchZenn = async () => {
 
 export default async function Page() {
   const zenn = await fetchZenn();
-
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
+  console.log(user);
   if (!zenn) {
     <h1>データが取得できませんでした。</h1>;
   }

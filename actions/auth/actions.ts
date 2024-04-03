@@ -48,7 +48,7 @@ export const create = async (
   } catch (error) {
     return { message: "メールアドレスかパスワードが違います" };
   }
-  redirect("/");
+  redirect("/login");
 };
 export const login = async (
   prevState: { message: string | null },
