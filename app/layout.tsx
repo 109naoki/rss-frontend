@@ -6,6 +6,7 @@ import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { Toaster } from "react-hot-toast";
 import { NextAuthProvider } from "@/lib/providers";
+import Providers from "@/lib/tanstack";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,10 +22,14 @@ export default function RootLayout({
     <html lang="ja">
       <NextAuthProvider>
         <body className="bg-layoutColor">
-          <Toaster />
-          <Header />
-          {children}
-          <Footer />
+          <>
+            <Toaster />
+            <Providers>
+              <Header />
+              {children}
+            </Providers>
+            <Footer />
+          </>
         </body>
       </NextAuthProvider>
     </html>
