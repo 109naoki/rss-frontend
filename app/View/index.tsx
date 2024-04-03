@@ -1,37 +1,15 @@
 "use client";
 import { Zenn } from "@/type";
-import { FC, useState } from "react";
+import { FC } from "react";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-
-import { Modal } from "@/app/components/Base/Modal";
 
 type Props = {
   zenn: Zenn;
 };
 
 export const View: FC<Props> = ({ zenn }) => {
-  const [bookmarked, setBookmarked] = useState<boolean[]>(
-    new Array(zenn.items.length).fill(false)
-  );
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const toggleBookmark = (index: number) => {
-    setIsModalOpen(true);
-  };
-
   return (
     <>
-      {isModalOpen && (
-        <Modal
-          open={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          title="ブックマーク"
-          type="modal"
-        >
-          <p>この記事をブックマークしますか？</p>
-        </Modal>
-      )}
-
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap -mx-2 mt-12">
           {zenn.items.map((item, index) => (
@@ -57,15 +35,14 @@ export const View: FC<Props> = ({ zenn }) => {
                       className="w-full mb-2"
                     />
                   )}
-                  <div className="flex items-center">
-                    <p className="text-sm text-gray-600">{item.isoDate}</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-gray-600">
+                      {new Date(item.isoDate).toLocaleDateString("ja-JP")}
+                    </p>
                     <BookmarkIcon
-                      className={`ml-2 cursor-pointer ${
-                        bookmarked[index] ? "text-red-500" : "text-gray-600"
-                      }`}
                       onClick={(e) => {
                         e.preventDefault();
-                        toggleBookmark(index);
+                        alert("クリックされました");
                       }}
                     />
                   </div>
