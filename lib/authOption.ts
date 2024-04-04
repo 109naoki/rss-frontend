@@ -1,7 +1,7 @@
 import axios from "axios";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
+import * as jwt from "jsonwebtoken";
 const API_URL =
   process.env.NODE_ENV === "production"
     ? process.env.PROD_API_URL
@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
           type: "password",
         },
       },
-      authorize: async (credentials) => {
+      authorize: async (credentials, req) => {
         const response = await axios<{
           token: string;
         }>({
@@ -31,10 +31,23 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (response.data.token) {
-          return {
-            id: response.data.token,
-            bearerToken: response.data.token,
-          };
+          try {
+            const decoded = jwt.verify(
+              response.data.token,
+              process.env.SECRET_KEY!
+            );
+
+            const userId = decoded.sub;
+
+            return {
+              id: userId,
+              bearerToken: response.data.token,
+            } as { id: string; bearerToken: string };
+          } catch (error) {
+            console.error("Token verification failed:", error);
+
+            return null;
+          }
         }
 
         return null;
@@ -45,16 +58,16 @@ export const authOptions: NextAuthOptions = {
     jwt: async (props) => {
       const { token, user } = props;
 
-      if (user) {
-        token.bearerToken = token.bearerToken;
-      }
       return token;
     },
 
     session: async (props) => {
       const { session, token } = props;
 
-      // session.user?.email = token.bearerToken;
+      if (session?.user) {
+        session.user.token = token;
+      }
+
       return session;
     },
   },
