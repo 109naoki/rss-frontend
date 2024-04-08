@@ -1,38 +1,43 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname} from "next/navigation";
 import { FC } from "react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+
 export const Header: FC = () => {
   const pathname = usePathname();
+  const {data:session} = useSession();
 
   const getLinkClassName = (path: string) => {
     return pathname === path
       ? "text-red-800 whitespace-nowrap"
       : "text-gray-800 whitespace-nowrap";
   };
+    
 
   return (
     <header className="flex flex-col items-center max-w-2xl mx-auto  mt-6">
       <div className="flex items-center justify-between w-full py-2.5 px-5">
-        <Link href="#">
+        <Link href="/">
           <Image src="/logo.webp" width={100} height={100} alt="Logo" />
         </Link>
         <Link href="/login" className="font-bold text-lg whitespace-nowrap">
           ログイン
         </Link>
-        <Link
+        {session?.user?.token && (
+        
+          <Link
           href="/login"
           onClick={() =>
-            signOut({
-              redirect: false,
-            })
+            signOut()
           }
           className="font-bold text-base whitespace-nowrap"
         >
           ログアウト
         </Link>
+      )}
+    
       </div>
       <nav className="w-full">
         <ul className="flex items-center justify-center overflow-x-auto whitespace-nowrap">
