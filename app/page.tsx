@@ -44,7 +44,6 @@ const fetchZenn = async () => {
 export default async function Page() {
   const zenn = await fetchZenn();
   const session = await getServerSession(authOptions);
-  console.log(session)
 
   if (!zenn) {
     <h1>データが取得できませんでした。</h1>;

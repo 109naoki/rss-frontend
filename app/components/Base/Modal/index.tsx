@@ -3,6 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { FC, Fragment, ReactNode } from "react";
 import { MenuClose } from "../icon/MenuCLose";
+import Link from "next/link";
 
 type Props = {
   open: boolean;
@@ -34,11 +35,11 @@ export const Modal: FC<Props> = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-[#000000]/25" />
+            <div className="fixed inset-0 bg-white" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center bg-[#000000]/50 text-center md:p-4">
+            <div className="flex min-h-full items-center justify-center bg-layoutColor text-center md:p-4">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -57,10 +58,10 @@ export const Modal: FC<Props> = ({
                   <Dialog.Title
                     as="h3"
                     className={clsx(
-                      "relative flex min-h-[57px] items-center p-4 font-bold text-gray",
+                      "relative flex min-h-[57px] items-center p-4 font-bold text-white",
                       type === "modal"
-                        ? "justify-center border-b-2 border-orange text-base leading-none lg:text-xl lg:leading-none"
-                        : "border-b border-gray text-base leading-normal"
+                        ? "justify-center border-b-2 border-orange text-lg leading-none"
+                        : "border-b border-gray-200 text-lg leading-normal bg-layoutColor"
                     )}
                   >
                     {title}
@@ -69,7 +70,17 @@ export const Modal: FC<Props> = ({
                       onClick={onClose}
                     />
                   </Dialog.Title>
-                  {children}
+                  <div className="p-4 text-gray-900 text-lg text-center">
+                    <>
+                      {children}
+                      <Link
+                        href="/login"
+                        className="mt-4 inline-block font-bold text-lg text-blue-600"
+                      >
+                        ログイン
+                      </Link>
+                    </>
+                  </div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
