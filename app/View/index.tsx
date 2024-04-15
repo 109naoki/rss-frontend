@@ -11,22 +11,26 @@ type Props = {
 
 export const View: FC<Props> = ({ zenn, session }) => {
   const [isOpen, setIsOpen] = useState(false);
-    const openModal = () => setIsOpen(true);
+  const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
+
   return (
     <>
-
       <div className="container mx-auto px-4">
-           <Modal
-        open={isOpen}
-        onClose={closeModal}
-        title="ログインが必要です"
-        type="modal"
-      >モーダルです</Modal>
+        <Modal
+          open={isOpen}
+          onClose={closeModal}
+          title="ログインが必要です"
+          type="modal"
+        >
+          <p className="text-center">
+            以下のリンクからログインをしてください。
+          </p>
+        </Modal>
         <div className="flex flex-wrap -mx-2 mt-12">
           {zenn.items.map((item, index) => (
             <div key={index} className="w-full sm:w-1/2 md:w-1/3 px-2 mb-4">
-              <div className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl transition-all duration-500 ease-in-out transform hover:scale-105">
                 <a
                   href={item.link}
                   target="_blank"
@@ -51,26 +55,23 @@ export const View: FC<Props> = ({ zenn, session }) => {
                     <p className="text-sm text-gray-600">
                       {new Date(item.isoDate).toLocaleDateString("ja-JP")}
                     </p>
-                  {
-  session?.user?.token ? (
-    <BookmarkIcon
-      className="size-8"
-      onClick={(e) => {
-        e.preventDefault();
-        alert("クリックされました");
-      }}
-    />
-  ) : (
-    <BookmarkIcon
-      className="size-8"
-      onClick={(e) => {
-        e.preventDefault();
-        openModal();
-      }}
-    />
-  )
-}
-                    
+                    {session?.user?.token ? (
+                      <BookmarkIcon
+                        className="size-8 cursor-pointer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          alert("クリックされました");
+                        }}
+                      />
+                    ) : (
+                      <BookmarkIcon
+                        className="size-8 cursor-pointer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openModal();
+                        }}
+                      />
+                    )}
                   </div>
                 </a>
               </div>

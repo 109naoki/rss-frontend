@@ -1,5 +1,7 @@
 import Parser from "rss-parser";
 import { View } from "./View";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOption";
 
 export const revalidate = 43200;
 
@@ -32,10 +34,10 @@ const fetchTech = async () => {
 };
 export default async function Page() {
   const tech = await fetchTech();
-
+  const session = await getServerSession(authOptions);
   if (!tech) {
     <h1>データが取得できませんでした。</h1>;
   }
 
-  return <View tech={tech} />;
+  return <View tech={tech} session={session} />;
 }
