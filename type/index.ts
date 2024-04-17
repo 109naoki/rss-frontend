@@ -35,13 +35,18 @@ export type Zenn = {
 export type Tech = {
   items: ZennItem[];
 };
+export type PostItem = {
+  name: string;
+  link: string;
+  date: string;
+  url: string;
+};
 
-// type Qiita = {
-//   title: string;
-//   link: string;
-//   pubDate: string;
-//   author: string;
-//   content: string;
-//   id: string;
-//   isoDate: Date;
-// };
+export type Item = {
+  title: string;
+  link: string;
+  enclosure: {
+    url: string;
+  };
+  isoDate: string;
+};

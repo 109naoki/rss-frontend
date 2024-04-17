@@ -32,12 +32,12 @@ export const Header: FC = () => {
         <Link href="/">
           <Image src="/logo.webp" width={100} height={100} alt="Logo" />
         </Link>
-        {!session?.user?.token && (
+        {!session && (
           <Link href="/login" className="font-bold text-lg whitespace-nowrap">
             ログイン
           </Link>
         )}
-        {session?.user?.token && (
+        {session && (
           <>
             <Menu as="div" className="relative">
               <Menu.Button>
