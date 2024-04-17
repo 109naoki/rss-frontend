@@ -57,7 +57,7 @@ export const View: FC<Props> = ({ tech, session }) => {
                     <p className="text-sm text-gray-600">
                       {new Date(item.isoDate).toLocaleDateString("ja-JP")}
                     </p>
-                    {session?.user?.token ? (
+                    {session ? (
                       <BookmarkIcon
                         className="size-8"
                         onClick={(e) => {

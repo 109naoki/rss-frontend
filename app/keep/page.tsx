@@ -1,10 +1,13 @@
-import { getServerSession } from "next-auth";
 import { View } from "./View";
-import { authOptions } from "@/lib/authOption";
+import { fetchItems } from "@/lib/api";
+import { useAuthorizationHeaders } from "@/hooks/useAuthorizationHeaders/server";
 
 export const revalidate = 43200;
 
 export default async function Page() {
-  const session = await getServerSession(authOptions);
-  return <View session={session} />;
+  const session = await useAuthorizationHeaders();
+
+  const response = await fetchItems(session);
+
+  return <View session={session} items={response} />;
 }

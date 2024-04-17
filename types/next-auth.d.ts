@@ -1,9 +1,17 @@
 import "next-auth";
 
 declare module "next-auth" {
+  interface User {
+    bearerToken?: string;
+  }
+
   interface Session {
-    user: {
-      token?: string;
-    } & DefaultSession["user"];
+    bearerToken?: string;
+  }
+}
+
+declare module "next-auth/adapters" {
+  interface AdapterUser {
+    bearerToken?: string;
   }
 }
