@@ -1,34 +1,47 @@
 "use client";
-import { Item, PostItem, Zenn } from "@/type";
 import { FC, useState } from "react";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { Modal } from "../components/Base/Modal";
 import { useAuthorizationHeaders } from "@/hooks/useAuthorizationHeaders";
 import { createItem } from "@/lib/api";
+import { AuthHeaders, Item, Zenn } from "@/type";
 
 type Props = {
   zenn: Zenn;
-  session: any;
+  token: AuthHeaders;
+  myItem: any;
 };
 
-export const View: FC<Props> = ({ zenn, session }) => {
+export const View: FC<Props> = ({ zenn, token, myItem: initialItem }) => {
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
-  const header = useAuthorizationHeaders();
+  const [myItems, setMyItems] = useState(initialItem);
 
+  const isBookmarked = (link: string) => {
+    return myItems.data.some((item: Item) => item.link === link);
+  };
   const handleBookmark = async (item: Item) => {
+    const itemData = {
+      name: item.title,
+      url: item.enclosure.url,
+      link: item.link,
+      date: item.isoDate,
+    };
+
     try {
-      const itemData: PostItem = {
-        name: item.title,
-        url: item.enclosure.url,
-        link: item.link,
-        date: item.isoDate,
-      };
-      const response = await createItem(itemData, header);
-      alert("ブックマークに追加されました！");
+      const existingItem = myItems.data.find((i: Item) => i.link === item.link);
+      if (existingItem) {
+        alert("削除処理");
+      } else {
+        const response = await createItem(itemData, token);
+        if (response) {
+          const newItem = { ...itemData, ID: response.newId };
+          setMyItems({ data: [...myItems.data, newItem] });
+        }
+      }
     } catch (error) {
-      console.error("Error creating item:", error);
+      console.error("Error handling the bookmark:", error);
     }
   };
   return (
@@ -72,12 +85,15 @@ export const View: FC<Props> = ({ zenn, session }) => {
                     <p className="text-sm text-gray-600">
                       {new Date(item.isoDate).toLocaleDateString("ja-JP")}
                     </p>
-                    {session ? (
+                    {token ? (
                       <BookmarkIcon
-                        className="size-8 cursor-pointer"
+                        className={"size-8 cursor-pointer"}
                         onClick={(e) => {
                           e.preventDefault();
                           handleBookmark(item);
+                        }}
+                        sx={{
+                          color: isBookmarked(item.link) ? "red" : "inherit",
                         }}
                       />
                     ) : (
@@ -86,6 +102,9 @@ export const View: FC<Props> = ({ zenn, session }) => {
                         onClick={(e) => {
                           e.preventDefault();
                           openModal();
+                        }}
+                        sx={{
+                          color: "inherit",
                         }}
                       />
                     )}

@@ -2,6 +2,9 @@ import Parser from "rss-parser";
 import { View } from "./View";
 import { authOptions } from "@/lib/authOption";
 import { getServerSession } from "next-auth/next";
+import { fetchItems } from "@/lib/api";
+import { useAuthorizationHeaders } from "@/hooks/useAuthorizationHeaders/server";
+
 export const revalidate = 43200;
 
 const fetchZenn = async () => {
@@ -31,23 +34,16 @@ const fetchZenn = async () => {
 
   return plainFeed;
 };
-// const fetchQiita = async () => {
-//   const parser = new Parser();
-//   const feed = await parser.parseURL(process.env.NEXT_PUBLIC_QIITA_FEED_URL!);
-//   if (!feed) {
-//     throw new Error("Failed to fetch Qiita feed");
-//   }
-
-//   return feed;
-// };
 
 export default async function Page() {
   const zenn = await fetchZenn();
-  const session = await getServerSession(authOptions);
 
-  if (!zenn) {
-    <h1>データが取得できませんでした。</h1>;
+  const token = await useAuthorizationHeaders();
+
+  if (!token) {
+    throw new Error("Failed to Authentication");
   }
+  const response = await fetchItems(token);
 
-  return <View zenn={zenn} session={session} />;
+  return <View zenn={zenn} token={token} myItem={response} />;
 }
