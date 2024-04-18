@@ -50,3 +50,23 @@ export type Item = {
   };
   isoDate: string;
 };
+
+export type AuthHeaders = {
+  Authorization: string;
+};
+
+export type Article = {
+  ID: number;
+  CreatedAt: string;
+  UpdatedAt: string;
+  DeletedAt: null | string;
+  name: string;
+  url: string;
+  link: string;
+  date: string;
+  userID: number;
+};
+
+export type MyItemData = {
+  data: Article[];
+};
