@@ -8,9 +8,13 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { Fragment } from "react";
 import { Menu } from "@headlessui/react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { CircularProgress } from "@mui/material";
 export const Header: FC = () => {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  console.log(session);
+  console.log(status);
+  const isLoading = status === "loading";
 
   const getLinkClassName = (path: string) => {
     return pathname === path
@@ -18,14 +22,29 @@ export const Header: FC = () => {
       : "text-gray-800 whitespace-nowrap";
   };
 
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+
+    window.location.href = "/";
+  };
+
   const links = [
     {
       href: "/login",
       label: "ログアウト",
-      action: () => signOut(),
+      action: handleLogout,
       icon: <LogoutIcon />,
     },
   ];
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <CircularProgress />
+      </div>
+    );
+  }
+
   return (
     <header className="flex flex-col items-center max-w-2xl mx-auto  mt-6">
       <div className="flex items-center justify-between w-full py-2.5 px-5">
@@ -47,17 +66,17 @@ export const Header: FC = () => {
                 {links.map((link) => (
                   <Menu.Item key={link.href} as={Fragment}>
                     {({ active }) => (
-                      <a
-                        href={link.href}
+                      <button
+                        // href={link.href}
                         className={`${active ? "bg-blue-500 text-white" : "bg-white text-black"} flex items-center p-2 space-x-2`}
-                        onClick={link.action}
-                        style={{ minHeight: "40px" }}
+                        onClick={signOut}
+                        // style={{ minHeight: "40px" }}
                       >
                         <span className="flex items-center justify-center">
                           {link.icon}
                         </span>
                         <span style={{ marginLeft: "8px" }}>{link.label}</span>{" "}
-                      </a>
+                      </button>
                     )}
                   </Menu.Item>
                 ))}
@@ -85,9 +104,9 @@ export const Header: FC = () => {
           </li>
 
           <li className="font-bold text-lg px-2.5 py-2.5 whitespace-nowrap">
-            <Link href="/keep" className={getLinkClassName("/keep")}>
+            <a href="/keep" className={getLinkClassName("/keep")}>
               保存済み一覧
-            </Link>
+            </a>
           </li>
         </ul>
       </nav>
