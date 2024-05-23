@@ -5,9 +5,15 @@ import { useAuthorizationHeaders } from "@/hooks/useAuthorizationHeaders/server"
 export const revalidate = 43200;
 
 export default async function Page() {
-  const session = await useAuthorizationHeaders();
+  const token = await useAuthorizationHeaders();
 
-  const response = await fetchItems(session);
+  let response = null;
 
-  return <View session={session} items={response} />;
+  if (token.Authorization === "Bearer undefined") {
+    response = null;
+  } else {
+    response = await fetchItems(token);
+  }
+
+  return <View token={token} items={response} />;
 }

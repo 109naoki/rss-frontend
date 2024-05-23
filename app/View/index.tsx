@@ -2,9 +2,10 @@
 import { FC, useState } from "react";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { Modal } from "../components/Base/Modal";
-import { createItem } from "@/lib/api";
+import { createItem, deleteItem } from "@/lib/api";
 import { AuthHeaders, Item, Zenn } from "@/type";
 import Skeleton from "@mui/material/Skeleton";
+import { useSession } from "next-auth/react";
 
 type Props = {
   zenn: Zenn;
@@ -17,8 +18,12 @@ export const View: FC<Props> = ({ zenn, token, myItem: initialItem }) => {
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
   const [myItems, setMyItems] = useState(initialItem);
+  const { data: session } = useSession();
+  const isLoggedIn = session !== null;
 
   const isBookmarked = (link: string) =>
+    myItems &&
+    Array.isArray(myItems.data) &&
     myItems.data.some((item: Item) => item.link === link);
 
   const handleBookmark = async (item: Item) => {
@@ -31,8 +36,16 @@ export const View: FC<Props> = ({ zenn, token, myItem: initialItem }) => {
 
     try {
       const existingItem = myItems.data.find((i: Item) => i.link === item.link);
+
       if (existingItem) {
-        alert("削除処理");
+        await deleteItem(existingItem.ID, token);
+
+        setMyItems((prevItems: any) => {
+          const updatedItems = prevItems.data.filter(
+            (i: Item) => i.link !== item.link
+          );
+          return { data: updatedItems };
+        });
       } else {
         const response = await createItem(itemData, token);
         if (response) {
@@ -41,7 +54,7 @@ export const View: FC<Props> = ({ zenn, token, myItem: initialItem }) => {
         }
       }
     } catch (error) {
-      console.error("Error handling the bookmark:", error);
+      alert("削除に失敗しました");
     }
   };
 
@@ -51,12 +64,10 @@ export const View: FC<Props> = ({ zenn, token, myItem: initialItem }) => {
         <Modal
           open={isOpen}
           onClose={closeModal}
-          title="ログインが必要です"
+          title="ブックマークへの追加"
           type="modal"
         >
-          <p className="text-center">
-            以下のリンクからログインをしてください。
-          </p>
+          <p className="text-center">ログインが必要になります。</p>
         </Modal>
         <div className="flex flex-wrap -mx-2 mt-12">
           {!zenn.items.length
@@ -94,7 +105,7 @@ export const View: FC<Props> = ({ zenn, token, myItem: initialItem }) => {
                         <p className="text-sm text-gray-600">
                           {new Date(item.isoDate).toLocaleDateString("ja-JP")}
                         </p>
-                        {token ? (
+                        {isLoggedIn ? (
                           <BookmarkIcon
                             className={"size-8 cursor-pointer"}
                             onClick={(e) => {

@@ -1,7 +1,7 @@
 import Parser from "rss-parser";
 import { View } from "./View";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/authOption";
+import { useAuthorizationHeaders } from "@/hooks/useAuthorizationHeaders/server";
+import { fetchItems } from "@/lib/api";
 
 export const revalidate = 43200;
 
@@ -34,10 +34,15 @@ const fetchTech = async () => {
 };
 export default async function Page() {
   const tech = await fetchTech();
-  const session = await getServerSession(authOptions);
-  if (!tech) {
-    <h1>データが取得できませんでした。</h1>;
+  const token = await useAuthorizationHeaders();
+
+  let response = null;
+
+  if (token.Authorization === "Bearer undefined") {
+    response = null;
+  } else {
+    response = await fetchItems(token);
   }
 
-  return <View tech={tech} session={session} />;
+  return <View tech={tech} token={token} myItem={response} />;
 }

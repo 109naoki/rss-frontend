@@ -1,33 +1,73 @@
 "use client";
 
-import { Tech } from "@/type";
+import { AuthHeaders, Item, Tech } from "@/type";
 
 import { FC, useState } from "react";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { Modal } from "@/app/components/Base/Modal";
+import { createItem, deleteItem } from "@/lib/api";
+import { useSession } from "next-auth/react";
 
 type Props = {
   tech: Tech;
-  session: any;
+  token: AuthHeaders;
+  myItem: any;
 };
 
-export const View: FC<Props> = ({ tech, session }) => {
+export const View: FC<Props> = ({ tech, token, myItem: initialItem }) => {
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
+  const [myItems, setMyItems] = useState(initialItem);
+  const { data: session } = useSession();
+  const isLoggedIn = session !== null;
 
+  const isBookmarked = (link: string) =>
+    myItems &&
+    Array.isArray(myItems.data) &&
+    myItems.data.some((item: Item) => item.link === link);
+
+  const handleBookmark = async (item: Item) => {
+    const itemData = {
+      name: item.title,
+      url: item.enclosure.url,
+      link: item.link,
+      date: item.isoDate,
+    };
+
+    try {
+      const existingItem = myItems.data.find((i: Item) => i.link === item.link);
+
+      if (existingItem) {
+        await deleteItem(existingItem.ID, token);
+
+        setMyItems((prevItems: any) => {
+          const updatedItems = prevItems.data.filter(
+            (i: Item) => i.link !== item.link
+          );
+          return { data: updatedItems };
+        });
+      } else {
+        const response = await createItem(itemData, token);
+        if (response) {
+          const newItem = { ...itemData, ID: response.newId };
+          setMyItems({ data: [...myItems.data, newItem] });
+        }
+      }
+    } catch (error) {
+      alert("削除に失敗しました");
+    }
+  };
   return (
     <>
       <div className="container mx-auto px-4">
         <Modal
           open={isOpen}
           onClose={closeModal}
-          title="ログインが必要です"
+          title="ブックマークへの追加"
           type="modal"
         >
-          <p className="text-center">
-            以下のリンクからログインをしてください。
-          </p>
+          <p className="text-center">ログインが必要になります。</p>
         </Modal>
         <div className="flex flex-wrap -mx-2 mt-12">
           {tech.items.map((item, index) => (
@@ -57,20 +97,26 @@ export const View: FC<Props> = ({ tech, session }) => {
                     <p className="text-sm text-gray-600">
                       {new Date(item.isoDate).toLocaleDateString("ja-JP")}
                     </p>
-                    {session ? (
+                    {isLoggedIn ? (
                       <BookmarkIcon
-                        className="size-8"
+                        className={"size-8 cursor-pointer"}
                         onClick={(e) => {
                           e.preventDefault();
-                          alert("クリックされました");
+                          handleBookmark(item);
+                        }}
+                        sx={{
+                          color: isBookmarked(item.link) ? "red" : "inherit",
                         }}
                       />
                     ) : (
                       <BookmarkIcon
-                        className="size-8"
+                        className="size-8 cursor-pointer"
                         onClick={(e) => {
                           e.preventDefault();
                           openModal();
+                        }}
+                        sx={{
+                          color: "inherit",
                         }}
                       />
                     )}
