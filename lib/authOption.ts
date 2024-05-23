@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
           type: "password",
         },
       },
-      authorize: async (credentials, req) => {
+      authorize: async (credentials) => {
         const response = await axios<{
           token: string;
           id: string;
@@ -32,7 +32,6 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (response.data.token) {
-          console.log(response.data.token);
           return {
             id: response.data.token,
             bearerToken: response.data.token,

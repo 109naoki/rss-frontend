@@ -2,7 +2,7 @@ import Parser from "rss-parser";
 
 const parser = new Parser();
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const feed = await parser.parseURL(process.env.NEXT_PUBLIC_ZENN_FEED_URL!);
     if (!feed) {

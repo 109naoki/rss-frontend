@@ -7,6 +7,7 @@ import { Footer } from "./components/Footer";
 import { Toaster } from "react-hot-toast";
 import { NextAuthProvider } from "@/lib/providers";
 import Providers from "@/lib/tanstack";
+import { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang="ja">
