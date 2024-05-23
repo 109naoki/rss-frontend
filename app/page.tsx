@@ -1,7 +1,6 @@
 import Parser from "rss-parser";
 import { View } from "./View";
-import { authOptions } from "@/lib/authOption";
-import { getServerSession } from "next-auth/next";
+
 import { fetchItems } from "@/lib/api";
 import { useAuthorizationHeaders } from "@/hooks/useAuthorizationHeaders/server";
 
@@ -40,10 +39,13 @@ export default async function Page() {
 
   const token = await useAuthorizationHeaders();
 
-  if (!token) {
-    throw new Error("Failed to Authentication");
+  let response = null;
+
+  if (token.Authorization === "Bearer undefined") {
+    response = null;
+  } else {
+    response = await fetchItems(token);
   }
-  const response = await fetchItems(token);
 
   return <View zenn={zenn} token={token} myItem={response} />;
 }

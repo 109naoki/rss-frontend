@@ -8,13 +8,11 @@ export async function GET(
 ) {
   const category = params.slug;
 
-  console.log(category);
   try {
     const [zennData, qiitaData] = await Promise.all([
       parser.parseURL(`https://zenn.dev/topics/${category}/feed`),
       parser.parseURL(`https://qiita.com/tags/${category}/feed.atom`),
     ]);
-    console.log(zennData, qiitaData);
 
     return new Response(
       JSON.stringify({ data: [...zennData.items, ...qiitaData.items] }),

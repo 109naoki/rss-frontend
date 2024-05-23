@@ -2,19 +2,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Fragment } from "react";
 import { Menu } from "@headlessui/react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { CircularProgress } from "@mui/material";
+import { Modal } from "../Base/Modal";
 export const Header: FC = () => {
   const pathname = usePathname();
   const { data: session, status } = useSession();
-  console.log(session);
-  console.log(status);
+  const isLoggedIn = session !== null;
   const isLoading = status === "loading";
+  const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
 
   const getLinkClassName = (path: string) => {
     return pathname === path
@@ -48,6 +51,16 @@ export const Header: FC = () => {
   return (
     <header className="flex flex-col items-center max-w-2xl mx-auto  mt-6">
       <div className="flex items-center justify-between w-full py-2.5 px-5">
+        <Modal
+          open={isOpen}
+          onClose={closeModal}
+          title="ログインが必要です"
+          type="modal"
+        >
+          <p className="text-center">
+            以下のリンクからログインをしてください。
+          </p>
+        </Modal>
         <Link href="/">
           <Image src="/logo.webp" width={100} height={100} alt="Logo" />
         </Link>
@@ -67,10 +80,11 @@ export const Header: FC = () => {
                   <Menu.Item key={link.href} as={Fragment}>
                     {({ active }) => (
                       <button
-                        // href={link.href}
                         className={`${active ? "bg-blue-500 text-white" : "bg-white text-black"} flex items-center p-2 space-x-2`}
-                        onClick={signOut}
-                        // style={{ minHeight: "40px" }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          signOut();
+                        }}
                       >
                         <span className="flex items-center justify-center">
                           {link.icon}
@@ -104,9 +118,21 @@ export const Header: FC = () => {
           </li>
 
           <li className="font-bold text-lg px-2.5 py-2.5 whitespace-nowrap">
-            <a href="/keep" className={getLinkClassName("/keep")}>
-              保存済み一覧
-            </a>
+            {isLoggedIn ? (
+              <a href="/keep" className={getLinkClassName("/keep")}>
+                ブックマーク
+              </a>
+            ) : (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  openModal();
+                }}
+                className="text-gray-800 whitespace-nowrap"
+              >
+                ブックマーク
+              </button>
+            )}
           </li>
         </ul>
       </nav>
