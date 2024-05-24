@@ -94,7 +94,7 @@ export const View: FC<Props> = ({ tech, token, myItem: initialItem }) => {
                     />
                   )}
                   <div className="flex items-center justify-between">
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 font-bold">
                       {new Date(item.isoDate).toLocaleDateString("ja-JP")}
                     </p>
                     {isLoggedIn ? (

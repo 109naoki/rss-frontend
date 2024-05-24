@@ -99,7 +99,7 @@ export const View: FC = () => {
 
             <div className="mt-6 space-y-2">
               <div>
-                <Link href="/register" className="font-medium">
+                <Link href="/register" className="font-bold">
                   新規登録はこちら
                 </Link>
               </div>
