@@ -3,8 +3,13 @@ import { View } from "./View";
 
 import { fetchItems } from "@/lib/api";
 import { useAuthorizationHeaders } from "@/hooks/useAuthorizationHeaders/server";
+import { Metadata } from "next";
 
 export const revalidate = 43200;
+
+export const metadata: Metadata = {
+  title: `${process.env.NEXT_PUBLIC_APP_TITLE} - ホーム`,
+};
 
 const fetchZenn = async () => {
   const parser = new Parser();

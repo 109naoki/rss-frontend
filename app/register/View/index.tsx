@@ -102,7 +102,7 @@ export const View: FC = () => {
 
             <div className="mt-6 space-y-2">
               <div>
-                <Link href="/login" className="font-medium">
+                <Link href="/login" className="font-bold">
                   すでにアカウントを持っている
                 </Link>
               </div>

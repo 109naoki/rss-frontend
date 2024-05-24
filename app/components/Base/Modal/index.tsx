@@ -35,11 +35,11 @@ export const Modal: FC<Props> = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-white" />
+            <div className="fixed inset-0 bg-layoutColor bg-opacity-100" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center bg-layoutColor text-center md:p-4">
+            <div className="flex min-h-full items-center justify-center text-center md:p-4">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -51,7 +51,7 @@ export const Modal: FC<Props> = ({
               >
                 <Dialog.Panel
                   className={clsx(
-                    "w-full overflow-hidden bg-white text-left align-middle shadow-xl transition-all md:rounded-md",
+                    "w-full overflow-hidden text-left align-middle shadow-xl transition-all md:rounded-md",
                     panelWidth ?? "md:max-w-[800px]"
                   )}
                 >

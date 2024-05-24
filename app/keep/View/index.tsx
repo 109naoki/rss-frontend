@@ -6,6 +6,7 @@ import { AuthHeaders } from "@/type";
 import { useSession } from "next-auth/react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { deleteItem } from "@/lib/api";
+import toast from "react-hot-toast";
 
 type Props = {
   items: any;
@@ -22,17 +23,16 @@ export const View: FC<Props> = ({ token, items }) => {
 
   const handleDelete = async (id: number) => {
     try {
-      const response = await deleteItem(id, token);
-      if (response.ok) {
-        setMyItems((prevItems: any) => {
-          const updatedItems = prevItems.data.filter(
-            (item: any) => item.ID !== id
-          );
-          return { ...prevItems, data: updatedItems };
-        });
-      }
+      await deleteItem(id, token);
+
+      setMyItems((prevItems: any) => {
+        const updatedItems = prevItems.data.filter(
+          (item: any) => item.ID !== id
+        );
+        return { ...prevItems, data: updatedItems };
+      });
     } catch (error) {
-      alert("削除に失敗しました");
+      toast.error("削除に失敗しました");
     }
   };
 
@@ -42,7 +42,7 @@ export const View: FC<Props> = ({ token, items }) => {
         <Modal
           open={isOpen}
           onClose={closeModal}
-          title="ログインが必要です"
+          title="ブックマークの閲覧"
           type="modal"
         >
           <p className="text-center">
@@ -74,7 +74,7 @@ export const View: FC<Props> = ({ token, items }) => {
                     />
                   )}
                   <div className="flex items-center justify-between">
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 font-bold">
                       {new Date(item.date).toLocaleDateString("ja-JP")}
                     </p>
                     {isLoggedIn ? (

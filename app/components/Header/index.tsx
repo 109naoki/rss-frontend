@@ -54,7 +54,7 @@ export const Header: FC = () => {
         <Modal
           open={isOpen}
           onClose={closeModal}
-          title="ログインが必要です"
+          title="ブックマークの閲覧"
           type="modal"
         >
           <p className="text-center">

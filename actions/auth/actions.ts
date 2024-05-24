@@ -41,7 +41,7 @@ export const create = async (
         password,
       }),
     });
-    console.log(res);
+
     if (res.status === 401 || res.status === 500) {
       return { message: "メールアドレスかパスワードが違います" };
     }
@@ -78,8 +78,7 @@ export const login = async (
     if (res.status === 401 || res.status === 500) {
       return { message: "メールアドレスかパスワードが違います" };
     }
-    const responseBody = await res.json();
-    console.log(responseBody);
+    await res.json();
   } catch (error) {
     return { message: "メールアドレスかパスワードが違います" };
   }
